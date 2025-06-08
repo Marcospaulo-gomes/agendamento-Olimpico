@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Agendamento de Quadras</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #2D3748;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffffff;
+    }
+
+    #calendar {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .fc .fc-event-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cancelar-evento {
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 12px;
+    }
+
+    /* Modal */
+    .modal, .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal.active, .overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+    }
+
+    .modal-content label, select {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    .modal-content select {
+      width: 100%;
+      padding: 5px;
+    }
+
+    .modal-content button {
+      margin-top: 15px;
+      width: 100%;
+      background: #0277bd;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<script>
+  if (localStorage.getItem("usuarioAutenticado") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
+
+<h1>Calendário de Agendamento de Quadras</h1>
+<div id="calendar"></div>
+
+<!-- Modal -->
+<div class="overlay" id="overlay"></div>
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3 id="dataModal"></h3>
+    <label>Horário:</label>
+    <select id="horaSelect">
+      <option value="">Selecione...</option>
+      <option>08:00</option>
+      <option>10:00</option>
+      <option>12:00</option>
+      <option>14:00</option>
+      <option>16:00</option>
+      <option>18:00</option>
+      <option>20:00</option>
+    </select>
+
+    <label>Quadra:</label>
+    <select id="quadraSelect">
+      <option value="">Selecione...</option>
+      <option>AREIA</option>
+      <option>CAMPINHO</option>
+      <option>MULTIESPORTIVA</option>
+    </select>
+
+    <button id="salvarBtn">Salvar Agendamento</button>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/locales-all.global.min.js"></script>
+<script>
+  let agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+  let selectedDate = "";
+  const calendarEl = document.getElementById('calendar');
+  const overlay = document.getElementById('overlay');
+  const modal = document.getElementById('modal');
+  const dataModal = document.getElementById('dataModal');
+  const horaSelect = document.getElementById('horaSelect');
+  const quadraSelect = document.getElementById('quadraSelect');
+  const salvarBtn = document.getElementById('salvarBtn');
+
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    locale: 'pt-br',
+    headerToolbar: {
+      left: 'prev,next',
+      center: 'title',
+      right: ''
+    },
+    selectable: true,
+    dateClick: function(info) {
+      selectedDate = info.dateStr;
+      dataModal.textContent = `Data selecionada: ${selectedDate}`;
+      horaSelect.value = "";
+      quadraSelect.value = "";
+      modal.classList.add('active');
+      overlay.classList.add('active');
+    },
+    eventDidMount: function(info) {
+      const btn = document.createElement('button');
+      btn.textContent = 'Cancelar';
+      btn.className = 'cancelar-evento';
+      btn.onclick = () => {
+        if (confirm("Deseja cancelar este agendamento?")) {
+          const [hora, quadra] = info.event.title.split(' - ');
+          agendamentos = agendamentos.filter(a => !(a.data === info.event.startStr && a.hora === hora && a.quadra === quadra));
+          localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+          info.event.remove();
+        }
+      };
+      info.el.querySelector('.fc-event-title').appendChild(btn);
+    },
+    events: agendamentos.map(ag => ({
+      title: `${ag.hora} - ${ag.quadra}`,
+      start: ag.data,
+      allDay: true
+    }))
+  });
+
+  calendar.render();
+
+  function fecharModal() {
+    modal.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+
+  salvarBtn.onclick = () => {
+    const hora = horaSelect.value;
+    const quadra = quadraSelect.value;
+
+    if (!hora || !quadra) {
+      alert("Preencha todos os campos.");
+      return;
+    }
+
+    const existe = agendamentos.find(a => a.data === selectedDate && a.hora === hora && a.quadra === quadra);
+    if (existe) {
+      alert("Esse horário já está agendado para essa quadra.");
+      return;
+    }
+
+    agendamentos.push({ data: selectedDate, hora, quadra });
+    localStorage.setItem("agendamentos", JSON.stringify(agendamentos));
+    calendar.addEvent({
+      title: `${hora} - ${quadra}`,
+      start: selectedDate,
+      allDay: true
+    });
+
+    fecharModal();
+  };
+
+  overlay.onclick = fecharModal;
+</script>
+
+</body>
+</html>

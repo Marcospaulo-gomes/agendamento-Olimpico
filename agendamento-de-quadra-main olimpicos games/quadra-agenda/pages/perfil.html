@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil do Cliente</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container-perfil {
+      max-width: 400px;
+      margin: 60px auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .foto-perfil img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+
+    .dados-usuario p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .botoes button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      border: none;
+      background-color: #1976d2;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .botoes button:hover {
+      background-color: #125ea8;
+    }
+
+    input[type="text"], input[type="email"], input[type="tel"] {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-edicao {
+      display: none;
+      text-align: left;
+    }
+
+    .form-edicao label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-perfil">
+    <h1>Meu Perfil</h1>
+
+    <div class="foto-perfil">
+      <img src="img/avatar-padrao.png" alt="Foto do cliente">
+    </div>
+
+    <div class="dados-usuario" id="dadosUsuario">
+      <p><strong>Nome:</strong> <span id="nomeUsuario">Carregando...</span></p>
+      <p><strong>Email:</strong> <span id="emailUsuario">Carregando...</span></p>
+      <p><strong>Telefone:</strong> <span id="telefoneUsuario">Carregando...</span></p>
+    </div>
+
+    <form id="formEdicao" class="form-edicao">
+      <label for="nome">Nome:</label>
+      <input type="text" id="editarNome" />
+
+      <label for="email">Email:</label>
+      <input type="email" id="editarEmail" />
+
+      <label for="telefone">Telefone:</label>
+      <input type="tel" id="editarTelefone" />
+
+      <div class="botoes">
+        <button type="button" onclick="salvarEdicao()">Salvar</button>
+        <button type="button" onclick="cancelarEdicao()">Cancelar</button>
+      </div>
+    </form>
+
+    <div class="botoes" id="botoesAcoes">
+      <button onclick="abrirEdicao()">Editar</button>
+      <button onclick="logout()">Sair</button>
+    </div>
+  </div>
+
+  <script>
+    // Simula o cliente "logado" com dados no localStorage
+    const usuario = JSON.parse(localStorage.getItem("cliente"));
+
+    // Verificação de login
+    if (!usuario) {
+      window.location.href = "login-cliente.html";
+    }
+
+    // Preencher os dados do perfil
+    document.getElementById("nomeUsuario").textContent = usuario.nome;
+    document.getElementById("emailUsuario").textContent = usuario.email;
+    document.getElementById("telefoneUsuario").textContent = usuario.telefone;
+
+    // Preenche inputs ao clicar em "Editar"
+    function abrirEdicao() {
+      document.getElementById("formEdicao").style.display = "block";
+      document.getElementById("botoesAcoes").style.display = "none";
+
+      document.getElementById("editarNome").value = usuario.nome;
+      document.getElementById("editarEmail").value = usuario.email;
+      document.getElementById("editarTelefone").value = usuario.telefone;
+    }
+
+    function cancelarEdicao() {
+      document.getElementById("formEdicao").style.display = "none";
+      document.getElementById("botoesAcoes").style.display = "block";
+    }
+
+    function salvarEdicao() {
+      const novoNome = document.getElementById("editarNome").value;
+      const novoEmail = document.getElementById("editarEmail").value;
+      const novoTelefone = document.getElementById("editarTelefone").value;
+
+      // Atualiza localStorage
+      const novoUsuario = {
+        nome: novoNome,
+        email: novoEmail,
+        telefone: novoTelefone
+      };
+      localStorage.setItem("cliente", JSON.stringify(novoUsuario));
+
+      // Atualiza visualmente
+      document.getElementById("nomeUsuario").textContent = novoNome;
+      document.getElementById("emailUsuario").textContent = novoEmail;
+      document.getElementById("telefoneUsuario").textContent = novoTelefone;
+
+      cancelarEdicao();
+    }
+
+    function logout() {
+      localStorage.removeItem("cliente");
+      window.location.href = "login-cliente.html";
+    }
+  </script>
+</body>
+</html>

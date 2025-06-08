@@ -1,0 +1,303 @@
+<!--
+  Este é o código HTML da página "Quadras Disponíveis".
+
+  OBJETIVO:
+  Esta página mostra para o usuário uma lista das quadras que estão disponíveis para agendamento. O conteúdo da lista será carregado dinamicamente com JavaScript.
+
+  FUNCIONALIDADES PRINCIPAIS:
+  - Um título centralizado ("Quadras Disponíveis")
+  - Um espaço onde as quadras serão exibidas (preenchido com JavaScript)
+  - Um link para que o usuário possa ver os agendamentos já feitos
+
+  DESIGN:
+  - Fundo escuro com um bloco branco centralizado
+  - Tipografia limpa com Arial
+  - Layout responsivo, centrado vertical e horizontalmente
+
+-->
+<!DOCTYPE html>
+<!-- Indica que o tipo de documento é HTML5 -->
+
+<html lang="pt-BR">
+<!-- Início do documento HTML, com o idioma definido como português do Brasil -->
+
+<head>
+  <!-- Cabeçalho da página, onde são definidas configurações que não aparecem visualmente -->
+
+  <meta charset="UTF-8">
+  <!-- Define o conjunto de caracteres como UTF-8 (permite acentos e símbolos) -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Faz com que a página se ajuste bem a diferentes tamanhos de tela, como celulares e tablets -->
+
+  <title>Quadras Disponíveis</title>
+  <!-- Título que aparece na aba do navegador -->
+
+  <link rel="stylesheet" href="quadras.css">
+  <!-- Importa um arquivo de estilo externo (CSS), se houver. Aqui está chamado de "quadras.css" -->
+</head>
+
+<style>
+  /* Início do CSS interno da página */
+
+  * {
+    padding: 0;
+    /* Remove o preenchimento interno padrão dos elementos */
+    margin: 0;
+    /* Remove as margens externas padrão */
+    box-sizing: border-box;
+    /* Garante que o tamanho total dos elementos inclua padding e bordas */
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #171717;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #000;
+    height: 50px;
+    user-select: none;
+    width: 100%;
+    /* Garante que o menu ocupe toda a largura da página */
+  }
+
+
+  .Logo {
+    display: flex;
+    /* Flexbox para alinhar imagem e texto na mesma linha */
+    align-items: center;
+    /* Alinha verticalmente ao centro */
+    color: #fff;
+    /* Cor branca para o texto */
+    font-weight: 900;
+    /* Fonte com peso extra negrito */
+    font-size: 23px;
+    /* Tamanho da fonte para o texto da logo */
+  }
+
+  .Logo img {
+    width: 40px;
+    /* Define a largura da imagem da logo */
+    margin-right: 10px;
+    /* Espaçamento à direita da imagem para o texto */
+  }
+
+  .nav-itens {
+    list-style: none;
+    /* Remove os marcadores da lista */
+    display: flex;
+    /* Flexbox para os itens do menu em linha */
+    gap: 30px;
+    /* Espaço entre os itens do menu */
+  }
+
+  .nav-itens a {
+    text-decoration: none;
+    /* Remove o sublinhado dos links */
+    color: whitesmoke;
+    /* Cor branca esbranquiçada para os links */
+    font-weight: bold;
+    /* Negrito para os links */
+    transition: 0.3s;
+    /* Animação suave para alterações visuais */
+  }
+
+  .nav-itens a:hover {
+    color: #ff8833;
+    /* Muda a cor para laranja quando o mouse passa por cima */
+    transform: scale(1.05);
+    /* Aumenta ligeiramente o tamanho do link */
+  }
+
+  .container {
+    max-width: 600px;
+    /* Define a largura máxima do container */
+    width: 100%;
+    /* Faz o container ocupar 100% da largura disponível até 600px */
+    margin: 40px auto;
+    /* Cria uma margem em cima e centraliza horizontalmente */
+    padding: 20px 2rem;
+    /* Espaçamento interno (20px em cima/baixo, 2rem nas laterais) */
+    background-color: #2D3748;
+    /* Fundo branco */
+    border-radius: 10px;
+    /* Arredonda os cantos do container */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Adiciona sombra suave ao redor */
+    text-align: center;
+    /* Centraliza o texto dentro do container */
+    box-shadow: 0px 0px 15px 10px;
+    /* Sombra mais forte (linha duplicada, pode ser otimizada) */
+    height: 400px;
+    /* Altura do container */
+    justify-content: center;
+    /* Centraliza os elementos filhos verticalmente (com flexbox) */
+    display: flex;
+    /* Layout flexível para organizar os elementos em coluna */
+    flex-direction: column;
+    /* Organiza os filhos em coluna */
+  }
+
+  h1 {
+    color: #ffffff;
+    /* Cor preta para o título */
+    margin-top: -10px;
+    /* Move o título um pouco para cima */
+  }
+
+  a {
+    /**/
+    color: #ffffff;
+    /* Cor azul para o link */
+    text-decoration: none;
+    /* Remove o sublinhado padrão do link */
+    margin-top: 20px;
+    /* Espaço acima do link */
+  }
+
+  h3 {
+    color: #ffffff;
+    /* Cor preta para os subtítulos */
+    margin: 10px;
+    /* Espaçamento ao redor do subtítulo */
+  }
+
+  button {
+    background-color: #007bff;
+    /* Cor de fundo laranja para o botão */
+    border: none;
+    /* Remove a borda do botão */
+    border-radius: 10px;
+    /* Arredonda os cantos do botão */
+    height: 26px;
+    /* Altura do botão */
+    width: 90px;
+    /* Largura do botão */
+    color: rgb(255, 255, 255);
+    /* Cor preta do texto do botão */
+    cursor: pointer;
+    /* Muda o cursor para uma "mãozinha" quando passar o mouse */
+  }
+
+  p {
+    color: #ffffff;
+    /* Cor preta para os parágrafos */
+    margin: 10px;
+    /* Espaço ao redor do parágrafo */
+  }
+
+  /* COMEÇO FAQ */
+
+  .location-footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+  }
+
+  .redes-sociais {
+    margin-bottom: 10px;
+  }
+
+  .redes-sociais h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+
+  .btn-social {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px;
+    padding: 8px 16px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+  }
+
+
+
+  .btn-social img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .location-link a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .location-link a:hover {
+    color: #007bff;
+  }
+</style>
+
+<body>
+  <!-- Corpo da página. Tudo que será visível ao usuário está dentro dessa tag -->
+  <nav>
+    <div class="Logo">
+      <img src="/quadra-agenda/img/logos/logo.png" alt="Logo Olímpico">
+      <span>OLÍMPICO SPORT CENTER</span>
+    </div>
+    <div class="nav-itens">
+      <a href="/quadra-agenda/index.html">Home</a>
+      <a href="/quadra-agenda/pages/login-cliente.html">Fazer Login</a>
+      <a href="/quadra-agenda/pages/quadras.html" style="color: #007bff;">Agendar Quadra</a>
+      <a href="/quadra-agenda/pages/meus.html">Meus Agendamentos</a>
+      <a href="/quadra-agenda/pages/perfil.html">Perfil</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Container central com fundo branco e conteúdo centralizado -->
+
+    <h1>Quadras Disponíveis</h1>
+    <!-- Título principal da página -->
+
+    <div class="quadra-lista" id="listaQuadras">
+      <!-- Aqui é onde serão listadas as quadras disponíveis -->
+      <!-- Os itens serão adicionados com JavaScript, por isso está vazio -->
+    </div>
+
+    <a href="meus.html">Ver meus agendamentos</a>
+    <!-- Link para página onde o usuário pode ver as quadras que ele já reservou -->
+  </div>
+  <footer class="location-footer">
+    <div class="redes-sociais">
+      <a href="https://wa.me/556284164230" target="_blank" class="btn-social">
+        <img src="/quadra-agenda/img/logos/whatsapp-icon-transparent-free-png.webp" alt="WhatsApp"> WhatsApp
+      </a>
+      <a href="https://instagram.com/olimpico_games" target="_blank" class="btn-social">
+        <img src="/quadra-agenda/img/logos/instagram-logo-1155105798346ilx9kcc6.png" alt="Instagram"> Instagram
+      </a>
+      <a href="https://facebook.com/olimpico.games" target="_blank" class="btn-social">
+        <img src="/quadra-agenda/img/logos/facebook-13.png" alt="Facebook"> Facebook
+      </a>
+    </div>
+
+    <div class="location-link">
+      <a href="https://maps.app.goo.gl/Gbvd7dhDZw4hZdhi8" target="_blank">
+        📍R. Agenor Caldas, 9, Nerópolis - GO, 75460-000
+      </a>
+    </div>
+  </footer>
+  <script src="../script.js"></script>
+  <!-- Importa o arquivo JavaScript que vai carregar dinamicamente as quadras -->
+</body>
+
+</html>

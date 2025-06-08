@@ -1,0 +1,272 @@
+<!--
+  OBJETIVO DESTA PÁGINA:
+  Esta página permite ao usuário realizar um agendamento de uma quadra esportiva.
+
+  FUNCIONALIDADES:
+  - Mostra o título "Agendar Quadra".
+  - Formulário com:
+      - Campo de quadra (desabilitado, só exibe o nome).
+      - Campo de data.
+      - Lista de horários disponíveis (carregados via JavaScript).
+      - Botão para confirmar o agendamento.
+  - Link para ver os agendamentos do usuário.
+
+  DESIGN:
+  - Layout centralizado, cores contrastantes (preto, branco, azul).
+  - Estilo limpo, moderno e intuitivo.
+-->
+
+<!DOCTYPE html>
+<!-- Define o tipo de documento como HTML5 -->
+
+<html lang="pt-br">
+<!-- Define o idioma principal do site como português do Brasil -->
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- Define o conjunto de caracteres como UTF-8 (aceita acentos e símbolos) -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Faz o layout se adaptar a diferentes tamanhos de tela (responsivo) -->
+
+  <title>Agendamento</title>
+  <!-- Título exibido na aba do navegador -->
+
+  <link rel="stylesheet" href="agendamento.css">
+  <!-- Importa o arquivo externo de estilos CSS chamado "agendamento.css" -->
+</head>
+
+<style>
+  /* Estilo interno da página (substitui ou complementa o CSS externo) */
+
+  * {
+    padding: 0; /* Remove espaçamentos internos padrão */
+    margin: 0;  /* Remove espaçamentos externos padrão */
+    box-sizing: border-box; /* Inclui padding e border no cálculo de tamanho */
+  }
+
+body {
+      font-family: Arial, sans-serif;
+      background-color: #171717;
+      margin: 0;
+      padding: 0;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #000;
+      height: 50px;
+      user-select: none;
+      width: 100%;
+      /* Garante que o menu ocupe toda a largura da página */
+    }
+
+
+    .Logo {
+      display: flex;
+      /* Flexbox para alinhar imagem e texto na mesma linha */
+      align-items: center;
+      /* Alinha verticalmente ao centro */
+      color: #fff;
+      /* Cor branca para o texto */
+      font-weight: 900;
+      /* Fonte com peso extra negrito */
+      font-size: 23px;
+      /* Tamanho da fonte para o texto da logo */
+    }
+
+    .Logo img {
+      width: 40px;
+      /* Define a largura da imagem da logo */
+      margin-right: 10px;
+      /* Espaçamento à direita da imagem para o texto */
+    }
+
+    .nav-itens {
+      list-style: none;
+      /* Remove os marcadores da lista */
+      display: flex;
+      /* Flexbox para os itens do menu em linha */
+      gap: 30px;
+      /* Espaço entre os itens do menu */
+    }
+
+    .nav-itens a {
+      text-decoration: none;
+      /* Remove o sublinhado dos links */
+      color: whitesmoke;
+      /* Cor branca esbranquiçada para os links */
+      font-weight: bold;
+      /* Negrito para os links */
+      transition: 0.3s;
+      /* Animação suave para alterações visuais */
+    }
+
+    .nav-itens a:hover {
+      color: #007bff;
+      /* Muda a cor para laranja quando o mouse passa por cima */
+      transform: scale(1.05);
+      /* Aumenta ligeiramente o tamanho do link */
+    }
+
+    /*fim do menu de navegação*/
+
+  .container {
+    max-width: 600px;              /* Largura máxima da caixa */
+    width: 100%;                   /* Preenche até 100% da largura disponível */
+    margin: 40px auto;             /* Margem vertical e centralização horizontal */
+    padding: 20px 2rem;            /* Espaçamento interno (20px vertical, 2rem horizontal) */
+    background-color: #2D3748;     /* Fundo branco */
+    border-radius: 10px;           /* Bordas arredondadas */
+    box-shadow: 0px 0px 15px 10px; /* Sombra suave ao redor */
+    text-align: center;            /* Centraliza o conteúdo textual */
+    height: 400px;                 /* Altura fixa da caixa */
+    display: flex;                 /* Flexbox para alinhar o conteúdo */
+    flex-direction: column;       /* Organiza os filhos em coluna */
+    justify-content: center;      /* Centraliza verticalmente dentro da caixa */
+  }
+
+  h1 {
+    color: #ffffff; /* Cor branca para o título */
+    margin: 20px;   /* Espaçamento ao redor */
+  }
+
+  p{
+     color: #ffffff; /* Cor branca para o título */
+    margin: 20px;   /* Espaçamento ao redor */ 
+  }
+
+  a {
+    color: #ffffff;       /* Cor laranja */
+    font-weight: bolder;  /* Deixa o texto em negrito */
+  }
+
+  label {
+    color: #ffffff;       /* Cor branca */
+    font-weight: bolder;  /* Negrito */
+    font-size: 18px;      /* Tamanho da fonte maior */
+  }
+
+  form {
+    display: flex;             /* Flexbox para o formulário */
+    flex-direction: column;   /* Organiza os campos verticalmente */
+  }
+
+  input {
+    width: 150px;             /* Largura do campo de entrada */
+    height: 26px;             /* Altura */
+    margin: 8px;              /* Espaçamento externo */
+    border-radius: 20px;      /* Borda arredondada */
+    border: none;             /* Remove a borda padrão */
+    background-color: whitesmoke; /* Fundo cinza claro */
+    color: #000000;           /* Texto preto */
+    margin-left: 44px;        /* Move o campo para a direita */
+  }
+
+  select {
+    width: 150px;           /* Largura do campo select */
+    margin: 10px;           /* Espaço externo */
+    border-radius: 70px;    /* Arredondamento da borda */
+    height: 26px;           /* Altura */
+    border: none;           /* Remove borda padrão */
+    color: #000000;         /* Cor do texto */
+    margin-left: 44px;      /* Move o campo para a direita */
+  }
+
+  button {
+    width: 200px;            /* Largura do botão */
+    height: 27px;            /* Altura */
+    margin: 20px;            /* Espaçamento externo */
+    cursor: pointer;         /* Cursor muda para "mão" ao passar por cima */
+    border-radius: 20px;     /* Borda arredondada */
+    border: none;            /* Remove a borda padrão */
+    background-color: #028abd; /* Cor de fundo azul */
+    font-size: 15px;         /* Tamanho da fonte */
+    font-weight: bold;       /* Negrito */
+    color: whitesmoke;       /* Cor do texto (quase branco) */
+  }
+
+  .box {
+    display: flex;            /* Flexbox para o container do formulário */
+    justify-content: center;  /* Centraliza o conteúdo horizontalmente */
+  }
+
+</style>
+
+<body>
+
+
+  <!-- Corpo da página, onde todo o conteúdo visível aparece -->
+<nav>
+  <div class="Logo">
+    <img src="/quadra-agenda/img/logos/logo.png" alt="Logo Olímpico">
+    <span>OLÍMPICO SPORT CENTER</span>
+  </div>
+  <div class="nav-itens">
+    <a href="/quadra-agenda/index.html">Home</a>
+    <a href="/quadra-agenda/pages/login-cliente.html">Fazer Login</a>
+    <a href="/quadra-agenda/pages/quadras.html">Agendar Quadra</a>
+    <a href="/quadra-agenda/pages/meus.html" style="color: #007bff;">Meus Agendamentos</a>
+    <a href="/quadra-agenda/pages/perfil.html">Perfil</a>
+  </div>
+</nav>
+  <script>
+    const cliente = JSON.parse(localStorage.getItem("clienteLogado"));
+    if (!cliente) {
+      window.location.href = "login-cliente.html";
+    } else {
+      document.write(`<p>Olá, ${cliente.nome}. Seu telefone é ${cliente.telefone}.</p>`);
+    }
+  </script>
+  <div class="container">
+    <!-- Caixa principal centralizada com layout bonito -->
+
+    <h1>Agendar Quadra</h1>
+    <!-- Título principal da página -->
+
+    <div class="box">
+      <!-- Container para o formulário, centralizado -->
+
+      <form>
+        <!-- Formulário onde o usuário preenche os dados para agendamento -->
+
+        <label for="quadra">Quadra</label>
+        <!-- Rótulo para o campo de quadra -->
+
+        <input type="text" id="quadra" name="quadra" required disabled />
+        <!-- Campo de texto da quadra (preenchido automaticamente, não editável) -->
+
+        <label for="data">Data</label>
+        <!-- Rótulo para o campo de data -->
+
+        <input type="date" id="data" name="data" required />
+        <!-- Campo de data -->
+
+        <label for="horaDisponivel">Horários Disponíveis</label>
+        <!-- Rótulo para a lista de horários -->
+
+        <select id="horaDisponivel" required>
+          <!-- Menu suspenso com os horários disponíveis -->
+          <option value="">Selecione um horário</option>
+          <!-- Opção padrão -->
+        </select>
+
+        <button type="submit">Confirmar Agendamento</button>
+        <!-- Botão para enviar o formulário -->
+      </form>
+    </div>
+
+    <a href="meus.html">Meus Agendamentos</a>
+    <!-- Link para ver os agendamentos já feitos -->
+  </div>
+
+  <script src="../script.js"></script>
+  <!-- Script JavaScript responsável por carregar os horários disponíveis e tratar o envio -->
+</body>
+
+</html>

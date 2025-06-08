@@ -1,0 +1,467 @@
+<!DOCTYPE html> <!-- Define o tipo do documento como HTML5 -->
+<html lang="pt-br"> <!-- Início do documento HTML, define o idioma como português do Brasil -->
+
+<head> <!-- Cabeçalho do documento, onde ficam as configurações e links importantes -->
+  <meta charset="UTF-8"> <!-- Define a codificação de caracteres como UTF-8 para suportar caracteres especiais -->
+  <title>Início - Agendamento de Quadras</title> <!-- Título que aparece na aba do navegador -->
+  <link rel="stylesheet" href="style.css"> <!-- Link para um arquivo CSS externo para estilização -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- Importa a fonte 'Lato' do Google Fonts -->
+
+  <!-- Estilos CSS internos para personalizar elementos -->
+  <style>
+    * {
+      margin: 0;
+      /* Remove margens padrão de todos os elementos */
+      padding: 0;
+      /* Remove espaçamento interno padrão */
+      box-sizing: border-box;
+      /* Faz com que padding e border sejam incluídos na largura total */
+    }
+
+    body {
+      background-color: #171717;
+      /* Cor de fundo escura para o corpo da página */
+      font-family: 'Lato', sans-serif;
+      /* Aplica a fonte Lato em todo o texto */
+    }
+
+    /*começo do menu de navegação*/
+    nav {
+      display: flex;
+      /* Usa flexbox para layout flexível no menu */
+      justify-content: space-around;
+      /* Espaça os itens uniformemente no eixo horizontal */
+      align-items: center;
+      /* Alinha os itens verticalmente no centro */
+      background-color: #000;
+      /* Fundo preto para o menu */
+      height: 50px;
+      /* Altura fixa para a barra de navegação */
+      user-select: none;
+      /* Impede seleção de texto no menu */
+    }
+
+    .Logo {
+      display: flex;
+      /* Flexbox para alinhar imagem e texto na mesma linha */
+      align-items: center;
+      /* Alinha verticalmente ao centro */
+      color: #fff;
+      /* Cor branca para o texto */
+      font-weight: 900;
+      /* Fonte com peso extra negrito */
+      font-size: 23px;
+      /* Tamanho da fonte para o texto da logo */
+    }
+
+    .Logo img {
+      width: 40px;
+      /* Define a largura da imagem da logo */
+      margin-right: 10px;
+      /* Espaçamento à direita da imagem para o texto */
+    }
+
+    .nav-itens {
+      list-style: none;
+      /* Remove os marcadores da lista */
+      display: flex;
+      /* Flexbox para os itens do menu em linha */
+      gap: 30px;
+      /* Espaço entre os itens do menu */
+    }
+
+    .nav-itens a {
+      text-decoration: none;
+      /* Remove o sublinhado dos links */
+      color: whitesmoke;
+      /* Cor branca esbranquiçada para os links */
+      font-weight: bold;
+      /* Negrito para os links */
+      transition: 0.3s;
+      /* Animação suave para alterações visuais */
+    }
+
+    .nav-itens a:hover {
+      color: #007bff;
+      /* Muda a cor para laranja quando o mouse passa por cima */
+      transform: scale(1.05);
+      /* Aumenta ligeiramente o tamanho do link */
+    }
+
+    /*fim do menu de navegação*/
+    .imagem-apresentacao img {
+      width: 100%;
+      /* A imagem ocupa toda a largura disponível */
+      max-height: 400px;
+      /* Altura máxima fixa para a imagem */
+      object-fit: cover;
+      /* Corta a imagem para cobrir o espaço sem distorcer */
+      display: block;
+      /* Remove espaço extra embaixo da imagem */
+    }
+
+    .button-blue {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 18px;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .sobre-local {
+      background-color: #1e1e1e;
+      /* Fundo cinza escuro para a seção */
+      color: white;
+      /* Cor do texto branca */
+      padding: 60px 20px;
+      /* Espaçamento interno vertical e horizontal */
+      text-align: center;
+      /* Centraliza o texto da seção */
+    }
+
+    .sobre-local h2 {
+      font-size: 32px;
+      /* Tamanho grande para o título */
+      margin-bottom: 20px;
+      /* Espaço abaixo do título */
+    }
+
+    .sobre-local p {
+      font-size: 18px;
+      /* Texto com tamanho médio */
+      line-height: 1.6;
+      /* Espaçamento entre linhas para melhor leitura */
+      color: #e0e0e0;
+      /* Cor cinza clara para o texto */
+    }
+
+    .espaco {
+      display: flex;
+      /* Flexbox para disposição lado a lado */
+      flex-wrap: wrap;
+      /* Permite que os itens quebrem para a próxima linha se necessário */
+      justify-content: center;
+      /* Centraliza os itens horizontalmente */
+      align-items: center;
+      /* Centraliza verticalmente os itens */
+      margin: 40px auto;
+      /* Espaçamento superior/inferior e centralização horizontal */
+      gap: 30px;
+      /* Espaço entre os itens */
+      max-width: 1000px;
+      /* Limita a largura máxima da área */
+    }
+
+    .espaco.reverse {
+      flex-direction: row-reverse;
+      /* Inverte a ordem dos itens no eixo horizontal */
+    }
+
+    .texto {
+      flex: 1;
+      /* O texto ocupa espaço flexível igual ao da imagem */
+      max-width: 500px;
+      /* Limita a largura máxima do texto */
+      padding: 20px;
+      /* Espaçamento interno do texto */
+      text-align: left;
+      /* Alinha o texto à esquerda */
+    }
+
+    .texto h3 {
+      font-size: 26px;
+      /* Tamanho médio para os subtítulos */
+      margin-bottom: 10px;
+      /* Espaço abaixo dos subtítulos */
+    }
+
+    .texto p {
+      font-size: 16px;
+      /* Tamanho do texto padrão para parágrafos */
+      line-height: 1.5;
+      /* Espaçamento entre linhas para leitura */
+    }
+
+    .imagem {
+      flex: 1;
+      /* A imagem também ocupa espaço flexível igual */
+      max-width: 500px;
+      /* Limita a largura máxima da imagem */
+      padding: 20px;
+      /* Espaçamento interno ao redor da imagem */
+    }
+
+    .imagem img {
+      width: 100%;
+      /* A imagem ocupa toda a largura do container */
+      border-radius: 15px;
+      /* Bordas arredondadas na imagem */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      /* Sombra para destacar a imagem */
+    }
+
+    /* COMEÇO FAQ */
+    .faq {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      padding: 60px 20px;
+      margin: 0 auto;
+      border-top: 2px solid #ffffff;
+    }
+
+    .faq h2 {
+      font-size: 32px;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .faq-item {
+      margin-bottom: 30px;
+      padding: 15px;
+      border-left: 3px solid #ffffff;
+      background-color: #2a2a2a;
+      border-radius: 8px;
+    }
+
+    .faq-item h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .faq-item p {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #ccc;
+    }
+
+    .redes-sociais {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+
+
+    .btn-social {
+      display: inline-block;
+      margin: 8px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+      color: #fff;
+    }
+
+
+
+    .btn-social {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+    }
+
+    .btn-social img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* FIM FAQ */
+    /* localização */
+    .location-link a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .location-link a:hover {
+      color: #007bff;
+    }
+  </style>
+</head>
+
+<body> <!-- Corpo da página, onde o conteúdo visível fica -->
+
+  <nav> <!-- Barra de navegação principal -->
+    <div class="Logo"> <!-- Container da logo e nome -->
+      <img src="/quadra-agenda/img/logos/logo.png" alt="Logo Olímpico"> <!-- Imagem da logo com texto alternativo -->
+      <span>OLÍMPICO SPORT CENTER</span> <!-- Nome do site/empresa -->
+    </div>
+    <div class="nav-itens"> <!-- Links do menu -->
+      <a style="color: #007bff;">Home</a>
+      <a href="pages/login-cliente.html">Fazer Login</a>
+      <a href="pages/quadras.html">Agendar Quadra</a>
+      <a href="pages/meus.html">Meus Agendamentos</a>
+      <a href="pages/perfil.html">Perfil</a>
+      <a href="pages/calendario.html">calen</a>
+
+    </div>
+  </nav>
+
+  <div class="imagem-apresentacao"> <!-- Container para imagem principal de apresentação -->
+    <img src="/quadra-agenda/img/f.png" alt="Apresentação do Local"> <!-- Imagem de destaque do local -->
+  </div>
+
+
+
+  <section class="sobre-local"> <!-- Seção que descreve o local -->
+    <div class="container"> <!-- Container para centralizar e limitar o conteúdo -->
+      <h2>Conheça o Espaço Olímpico</h2> <!-- Título da seção -->
+      <p>O Olímpico é muito mais que um centro de esportes. Criado com o objetivo de unir saúde, lazer e comunidade, o
+        espaço nasceu em 2020 e desde então se tornou um ponto de encontro para amantes do esporte e do bem-estar.</p>
+      <!-- Parágrafo de descrição -->
+    </div>
+    <div class="location-link">
+      <a href="https://maps.app.goo.gl/Gbvd7dhDZw4hZdhi8" target="_blank">
+        📍R. Agenor Caldas, 9, Nerópolis - GO, 75460-000
+      </a>
+
+
+
+
+    </div>
+    <!-- Quadra de Areia -->
+    <div class="espaco"> <!-- Container flexível para conteúdo lado a lado -->
+      <div class="texto"> <!-- Texto descritivo da quadra -->
+        <h3>Quadra de Areia</h3> <!-- Título da quadra -->
+        <p>Nossa quadra de areia foi pensada para entregar a melhor experiência em esportes ao ar livre. Ideal para
+          vôlei de praia, beach tennis e futevôlei, o espaço oferece areia fina e nivelada, especialmente selecionada
+          para garantir conforto, segurança e performance durante os jogos.
+          A estrutura conta com excelente iluminação noturna, permitindo partidas emocionantes mesmo após o pôr do sol.
+          O ambiente é aberto, arejado e possui cercamento seguro, perfeito tanto para treinos quanto para jogos entre
+          amigos.
+          Seja para lazer ou competição, nossa quadra de areia está pronta para receber você com qualidade e
+          infraestrutura de alto nível.</p> <!-- Descrição da quadra -->
+        <p><strong>Valor: R$ 60,00</strong></p> <!-- Preço destacado -->
+        <a class="button-blue" href="pages/quadras.html">Agendar Quadra</a> <!--botão agendar quadra -->
+      </div>
+      <div class="imagem"> <!-- Imagem ilustrativa da quadra -->
+        <img src="/quadra-agenda/img/quadraAreia.png" alt="Quadra de Areia">
+
+      </div>
+    </div>
+
+    <!-- Campo de Futebol -->
+    <div class="espaco reverse"> <!-- Mesma estrutura, porém com ordem invertida para imagem/texto -->
+      <div class="texto">
+        <h3>Campo de Futebol</h3>
+        <p>Nosso campo sintético oferece a combinação perfeita entre conforto e desempenho. Com gramado de alta
+          qualidade e manutenção frequente, proporciona excelente aderência e amortecimento, ideal para partidas de
+          futebol society e treinamentos intensos. O espaço conta com iluminação de LED para jogos noturnos, alambrado
+          seguro e marcações oficiais, garantindo uma experiência completa para atletas amadores e profissionais.
+          A estrutura ainda dispõe de área coberta para acompanhantes, banheiros com chuveiro e estacionamento próximo.
+          Seja para aquele jogo entre amigos ou campeonatos mais disputados, o campo está pronto para receber você com
+          excelência.</p>
+        <p><strong>Valor: R$ 150,00</strong></p>
+        <a class="button-blue" href="pages/quadras.html">Agendar Horarío</a> <!--botão agendar quadra -->
+      </div>
+      <div class="imagem">
+        <img src="/quadra-agenda/img/CampoFutSoc.png" alt="Campo de Futebol">
+      </div>
+    </div>
+
+    <!-- Quadra Pavimentada -->
+    <div class="espaco">
+      <div class="texto">
+        <h3>Quadra Pavimentada - 3º Andar</h3>
+        <p>Localizada no terceiro andar do complexo, esta quadra poliesportiva eleva o conceito de esporte urbano. Com
+          vista panorâmica e estrutura moderna, o espaço foi desenvolvido para praticantes exigentes que buscam
+          qualidade, praticidade e estilo em um só lugar.
+          A quadra é versátil e atende a diferentes modalidades como futebol, basquete, vôlei e handebol, com piso
+          emborrachado, marcações oficiais e redes ajustáveis.
+          Além disso, o ambiente é totalmente iluminado, ventilado e seguro, ideal para jogos diurnos e noturnos.
+          Perfeita para quem quer praticar esporte com conforto, praticidade e aquela vista incrível da cidade.</p>
+        <p><strong>Valor: R$ 50,00</strong></p>
+        <a class="button-blue" href="pages/quadras.html">Agendar Horarío</a> <!--botão agendar quadra -->
+      </div>
+      <div class="imagem">
+        <img src="/quadra-agenda/img/quadraP.png" alt="Quadra Pavimentada">
+      </div>
+    </div>
+    <!-- Vestiário -->
+    <div class="espaco reverse">
+      <div class="texto">
+        <h3>Vestiários e Troca de Roupa</h3>
+        <p>Espaço limpo e seguro com chuveiros, armários e acessibilidade. Conforto garantido!</p>
+      </div>
+      <div class="imagem">
+        <img src="/quadra-agenda/img/vestiario.png" alt="Vestiário">
+      </div>
+    </div>
+
+    <div class="container"> <!-- Container para centralizar e limitar o conteúdo -->
+      <h2>Atividades Parceiras</h2> <!-- Título da seção -->
+      <p>Além das quadras, nosso espaço também é sede de diversas atividades oferecidas por parceiros que alugam áreas
+        específicas dentro do local. Essas atividades são de responsabilidade dos próprios professores ou empresas, e
+        incluem:</p> <!-- Parágrafo de descrição -->
+    </div>
+    <!-- Academia -->
+    <div class="espaco reverse">
+      <div class="texto">
+        <h3>Academia</h3>
+        <p>Equipamentos modernos, equipe capacitada e ambiente motivador. Aberta todos os dias.</p>
+        <p><strong>Valor: R$ 100,00 por mês</strong></p>
+      </div>
+      <div class="imagem">
+        <img src="/quadra-agenda/img/academia.jpg" alt="Academia">
+      </div>
+    </div>
+
+    <!-- Área de Jiu-Jitsu -->
+    <div class="espaco">
+      <div class="texto">
+        <h3>Área de Jiu-Jitsu</h3>
+        <p>Tatame seguro, aulas regulares para todos os níveis. Ambiente de disciplina e respeito.</p>
+        <p><strong>Valor: R$ 150,00 por mês</strong></p>
+      </div>
+      <div class="imagem">
+        <img src="/quadra-agenda/img/jiu.jpg" alt="Área de Jiu-Jitsu">
+      </div>
+    </div>
+
+
+    <!-- SEÇÃO FAQ -->
+    <section class="faq">
+      <h2>Perguntas Frequentes (FAQ)</h2>
+
+      <div class="faq-item">
+        <h3>Como faço para agendar uma quadra?</h3>
+        <p>Acesse a página principal, selecione a quadra, escolha data e horário, e clique em "Agendar" você sera
+          redirecionado para o WhatsApp para fazer a confirmaçâo do Horario.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Posso cancelar meu agendamento?</h3>
+        <p>Sim, vá até "Meus Agendamentos" e clique em "Cancelar".</p>
+      </div>
+
+      <div class="faq-item">
+        <h3>Quais horários estão disponíveis?</h3>
+        <p>Os horários aparecem automaticamente conforme a data e quadra escolhidas.</p>
+      </div>
+      <div class="redes-sociais">
+        <h3>Fale Conosco:</h3>
+        <a href="https://wa.me/SEUNUMERO" target="_blank" class="btn-social">
+          <img src="/quadra-agenda/img/logos/whatsapp-icon-transparent-free-png.webp" alt="WhatsApp"> WhatsApp
+        </a>
+        <a href="https://instagram.com/SEUINSTAGRAM" target="_blank" class="btn-social">
+          <img src="/quadra-agenda/img/logos/instagram-logo-1155105798346ilx9kcc6.png" alt="Instagram"> Instagram
+        </a>
+        <a href="https://facebook.com/SEUFACEBOOK" target="_blank" class="btn-social">
+          <img src="/quadra-agenda/img/logos/facebook-13.png" alt="Facebook"> Facebook
+        </a>
+      </div>
+
+    </section>
+
+</body>
+
+</html> <!-- Fim do documento HTML -->

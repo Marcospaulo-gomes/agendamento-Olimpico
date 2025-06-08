@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clientes Cadastrados ADM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fafafa;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #01579b;
+    }
+
+    #formCadastro, #filtroBusca {
+      max-width: 600px;
+      margin: 20px auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    #formCadastro input,
+    #filtroBusca input {
+      padding: 10px;
+      flex: 1 1 200px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    #formCadastro button {
+      padding: 10px 20px;
+      background-color: #0277bd;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #0277bd;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    button.editar {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    button.excluir {
+      background-color: #f44336;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th {
+        display: none;
+      }
+
+      td {
+        position: relative;
+        padding-left: 50%;
+        margin-bottom: 10px;
+        border: none;
+        border-bottom: 1px solid #ddd;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        font-weight: bold;
+      }
+    }
+
+    /* Modal */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    #modal input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    #modal-buttons {
+      text-align: right;
+    }
+
+    #modal-buttons button {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+<script>
+  if (localStorage.getItem("usuarioAutenticado") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
+<h1>Clientes Cadastrados ADM</h1>
+
+<!-- Campo de busca -->
+<div id="filtroBusca">
+  <input type="text" id="inputBusca" placeholder="Buscar por nome ou email..." oninput="filtrarClientes()">
+</div>
+
+<!-- Formulário de novo cliente -->
+<form id="formCadastro" onsubmit="cadastrarCliente(event)">
+  <input type="text" id="nome" placeholder="Nome" required>
+  <input type="text" id="telefone" placeholder="Telefone" required>
+  <input type="email" id="email" placeholder="Email" required>
+  <input type="text" id="quadra" placeholder="Quadra" required>
+  <button type="submit">Cadastrar</button>
+</form>
+
+<!-- Tabela -->
+<table id="tabelaClientes">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>Email</th>
+      <th>Quadra</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- Modal para edição -->
+<div id="modal">
+  <div id="modal-content">
+    <h3>Editar Cliente</h3>
+    <input id="editNome" type="text" placeholder="Nome">
+    <input id="editTelefone" type="text" placeholder="Telefone">
+    <input id="editEmail" type="email" placeholder="Email">
+    <input id="editQuadra" type="text" placeholder="Quadra">
+    <div id="modal-buttons">
+      <button onclick="fecharModal()">Cancelar</button>
+      <button class="editar" onclick="salvarEdicao()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+  let editIndex = null;
+
+  const tbody = document.querySelector("#tabelaClientes tbody");
+
+  function cadastrarCliente(e) {
+    e.preventDefault();
+    const nome = document.getElementById("nome").value.trim();
+    const telefone = document.getElementById("telefone").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const quadra = document.getElementById("quadra").value.trim();
+
+    if (!nome || !telefone || !email || !quadra) {
+      alert("Preencha todos os campos.");
+      return;
+    }
+
+    clientes.push({ nome, telefone, email, quadra });
+    localStorage.setItem("clientes", JSON.stringify(clientes));
+
+    document.getElementById("formCadastro").reset();
+    carregarClientes();
+  }
+
+  function carregarClientes(lista = clientes) {
+    tbody.innerHTML = "";
+    lista.forEach((cliente, index) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td data-label="Nome">${cliente.nome}</td>
+        <td data-label="Telefone">${cliente.telefone}</td>
+        <td data-label="Email">${cliente.email}</td>
+        <td data-label="Quadra">${cliente.quadra}</td>
+        <td data-label="Ações">
+          <button class="editar" onclick="abrirModal(${index})">Editar</button>
+          <button class="excluir" onclick="excluirCliente(${index})">Excluir</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function excluirCliente(index) {
+    if (confirm("Deseja excluir este cliente?")) {
+      clientes.splice(index, 1);
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+      carregarClientes();
+    }
+  }
+
+  function abrirModal(index) {
+    editIndex = index;
+    const cliente = clientes[index];
+
+    document.getElementById("editNome").value = cliente.nome;
+    document.getElementById("editTelefone").value = cliente.telefone;
+    document.getElementById("editEmail").value = cliente.email;
+    document.getElementById("editQuadra").value = cliente.quadra;
+
+    document.getElementById("modal").style.display = "flex";
+  }
+
+  function fecharModal() {
+    document.getElementById("modal").style.display = "none";
+  }
+
+  function salvarEdicao() {
+    const nome = document.getElementById("editNome").value.trim();
+    const telefone = document.getElementById("editTelefone").value.trim();
+    const email = document.getElementById("editEmail").value.trim();
+    const quadra = document.getElementById("editQuadra").value.trim();
+
+    if (!nome || !telefone || !email || !quadra) {
+      alert("Preencha todos os campos.");
+      return;
+    }
+
+    clientes[editIndex] = { nome, telefone, email, quadra };
+    localStorage.setItem("clientes", JSON.stringify(clientes));
+    fecharModal();
+    carregarClientes();
+  }
+
+  function filtrarClientes() {
+    const termo = document.getElementById("inputBusca").value.toLowerCase();
+    const filtrados = clientes.filter(c =>
+      c.nome.toLowerCase().includes(termo) ||
+      c.email.toLowerCase().includes(termo)
+    );
+    carregarClientes(filtrados);
+  }
+
+  carregarClientes();
+</script>
+
+</body>
+</html>
